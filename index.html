@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pause Tool</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="shell">
+
+    <!-- Module A: Landing -->
+    <section id="module-a" class="card" aria-label="Landing">
+      <p class="kicker">A 5-minute pause</p>
+
+      <h1 class="title">
+        For moments when pressure, expectations, or fear are making decisions louder than you.
+      </h1>
+
+      <ul class="bullets" aria-label="When to use this">
+        <li>Feeling stuck in a big decision</li>
+        <li>Unsure whether you're choosing or just proving yourself</li>
+        <li>Torn between what you want and what others expect</li>
+      </ul>
+
+      <button id="startBtn" class="btn" type="button">
+        Start
+      </button>
+    </section>
+
+<!-- Module B -->
+<section id="module-b" class="card hidden" aria-label="Write it down">
+  <p class="kicker">Write it down</p>
+
+  <h2 class="title small">
+    Let‘s separate what you can act on from what you can’t control.
+  </h2>
+
+  <div class="grid3">
+
+    <!-- Panel 1 -->
+    <div class="panel collapsible open" data-panel="influence">
+      <button class="panelHeader">
+        <div class="panelText">
+          <h3 class="panelTitle">What can you influence right now?</h3>
+          <p class="panelHint">Actions you can take. Choices you control.</p>
+        </div>
+      </button>
+
+      <div class="panelBody">
+        <textarea id="b_influence" class="field"
+          placeholder="e.g., gather one piece of information, ask one question, choose a next step"></textarea>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="panel collapsible open" data-panel="nocontrol">
+      <button class="panelHeader">
+        <div class="panelText">
+          <h3 class="panelTitle">What is not in your control?</h3>
+          <p class="panelHint">Other people's reactions. Outcomes. Timing.</p>
+        </div>
+      </button>
+
+      <div class="panelBody">
+        <textarea id="b_nocontrol" class="field"
+          placeholder="e.g., someone else's opinion, the final result, how fast it resolves"></textarea>
+      </div>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="panel collapsible open" data-panel="support">
+      <button class="panelHeader">
+        <div class="panelText">
+          <h3 class="panelTitle">What support could you ask for?</h3>
+          <p class="panelHint">A conversation. Time. Help. Clarity.</p>
+        </div>
+      </button>
+
+      <div class="panelBody">
+        <textarea id="b_support" class="field"
+          placeholder="e.g., ask for 24 hours, ask a friend to listen, ask for feedback"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <button id="backToA" class="btn ghost" type="button">Back</button>
+    <button id="toC" class="btn" type="button">Continue</button>
+  </div>
+</section>
+
+
+<!-- Module C -->
+<section id="module-c" class="card hidden" aria-label="Pause">
+  <p class="kicker">Pause</p>
+
+  <h2 class="title small">
+    Which thoughts are quietly pushing you right now?
+  </h2>
+
+  <!-- Drivers -->
+  <div class="drivers">
+    <label class="driver">
+      <input type="checkbox" value="Be Perfect">
+      <span>Be perfect</span>
+    </label>
+
+    <label class="driver">
+      <input type="checkbox" value="Be Strong">
+      <span>Be strong</span>
+    </label>
+
+    <label class="driver">
+      <input type="checkbox" value="Try Hard">
+      <span>Try hard</span>
+    </label>
+
+    <label class="driver">
+      <input type="checkbox" value="Please Others">
+      <span>Please others</span>
+    </label>
+
+    <label class="driver">
+      <input type="checkbox" value="Hurry Up">
+      <span>Hurry up</span>
+    </label>
+  </div>
+
+  <!-- Allower output -->
+<div id="allowerBox" class="allower hidden" aria-live="polite">
+  <div class="allowerPrefix">Actually,</div>
+  <div id="allowerContent"></div>
+</div>
+
+  <div class="actions">
+    <button id="backToB" class="btn ghost" type="button">Back</button>
+    <button id="toPause" class="btn" type="button">Continue</button>
+  </div>
+</section>
+
+<!-- Pause page -->
+<section id="module-c-pause" class="pauseScreen hidden" aria-label="Pause moment">
+  <!-- background is handled by CSS -->
+  <div class="pauseOverlay" id="pauseOverlay" role="button" tabindex="0" aria-label="Continue">
+    <!-- Step 1: headline -->
+    <div id="pauseHeadline" class="pauseBlock">
+      <div class="pauseBig">Before you continue</div>
+      <div class="pauseBig">Take a moment</div>
+      <div class="pauseBig subtle">Let this arrive</div>
+
+    </div>
+
+    <!-- Step 2: allowers (starts hidden) -->
+    <div id="pauseAllowers" class="pauseBlock hidden">
+      <div id="pauseText" class="pauseAllowersText"></div>
+    </div>
+  </div>
+
+  <!-- small back button, subtle corner -->
+  <button id="backToC" class="pauseBack" type="button">Back</button>
+  <button id="pauseToD" class="pauseContinue hidden" type="button">Continue</button>
+</section>
+
+
+<!-- Module D -->
+<section id="module-d" class="card hidden" aria-label="Values filter">
+  <p class="kicker">Values</p>
+
+  <h2 class="title small">
+    Choose up to four values you don't want this decision to betray.
+  </h2>
+
+  <p class="helper">
+    Pick <strong>1-4</strong>.
+  </p>
+
+  <div id="valuesGrid" class="valuesGrid" role="group" aria-label="Values list">
+    <!-- injected by JS -->
+  </div>
+
+  <div class="limitNote hidden" id="valuesLimitNote" aria-live="polite">
+    You can choose up to four.
+  </div>
+
+  <div class="actions">
+    <button id="backToPause" class="btn ghost" type="button">Back</button>
+    <button id="toE" class="btn" type="button" disabled>Continue</button>
+  </div>
+</section>
+
+<!-- Module E -->
+<section id="module-e" class="card hidden module-e" aria-label="Output">
+  <p class="kicker">Next</p>
+
+  <h2 class="title small">
+    Take what you need from this.
+  </h2>
+
+  <!-- Recap from Module B -->
+  <div class="e-block">
+    <p class="e-label">What you said you can influence right now</p>
+
+    <textarea
+      id="e_influence_source"
+      class="field e-source"
+      aria-label="What you can influence"
+    ></textarea>
+  </div>
+
+  <!-- Instruction -->
+  <p class="e-instruction">
+    <strong>Choose one thing from above, and turn it into an action.</strong>
+  </p>
+
+  <!-- Next step -->
+  <div class="e-block">
+    <label for="e_next_step" class="e-label">My next step is:</label>
+    <textarea
+      id="e_next_step"
+      class="field"
+      placeholder="One concrete action."
+      aria-label="My next step"
+    ></textarea>
+  </div>
+
+  <!-- Background references (Module B) -->
+<div class="e-ref">
+  <div class="e-ref-block">
+    <span class="e-ref-label">What you can’t control</span>
+    <div id="e_nocontrol" class="e-ref-text"></div>
+  </div>
+
+  <div class="e-ref-block">
+    <span class="e-ref-label">What support you could ask for</span>
+    <div id="e_support" class="e-ref-text"></div>
+  </div>
+</div>
+
+  <!-- Allowing (Module C) -->
+  <div class="e-line">
+    <span class="e-prefix">I’m allowing myself to:</span>
+    <span id="e_allowing" class="e-text"></span>
+  </div>
+
+  <!-- Values (Module D) -->
+  <div class="e-line">
+    <span class="e-prefix">I’m choosing not to betray:</span>
+    <span id="e_values" class="e-text"></span>
+  </div>
+
+  <div class="actions">
+    <button id="backToD" class="btn ghost" type="button">Back</button>
+    <button id="copyE" class="btn" type="button">Copy</button>
+  </div>
+
+  <p class="e-close">
+  You don't need to decide everything right now.<br>
+  This is enough for this moment.
+</p>
+</section>
+
+</main>
+
+<script src="./app.js"></script>
+</body>
+</html>
+
+
+

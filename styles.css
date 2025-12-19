@@ -1,0 +1,821 @@
+:root{
+  /* Palette */
+  --bg: #DBDDE8;        /* Comet */
+  --ink: #636887;       /* Mischka */
+
+  /* UI neutrals */
+  --stroke: rgba(99, 104, 135, .14);
+  --muted: rgba(99, 104, 135, .72);
+  --muted2: rgba(99, 104, 135, .55);
+
+  --shadow: 0 10px 28px rgba(60, 70, 100, .08);
+}
+
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+
+body{
+  margin: 0;
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  line-height: 1.6;
+}
+
+html{
+  background-image: url("./images/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+html::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  background: rgba(219,221,232,.45);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.shell{
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 40px 18px;
+}
+
+/* Card container (all modules) */
+.card{
+  width: min(980px, 100%);
+  padding: 44px 42px;
+  border: 1px solid var(--stroke);
+  background: linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,.22));
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px); 
+  position: relative;
+  z-index: 1;
+}
+
+
+.kicker{
+  margin: 0 0 18px;
+  font-size: 13px;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+.title{
+  margin: 0 0 28px;
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.title.small{
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 580;
+  margin-bottom: 26px;
+  line-height: 1.25;
+}
+
+.bullets{
+  margin: 0 0 24px;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 16px;
+}
+.bullets li{ margin: 8px 0; }
+
+/* Buttons */
+.btn{
+  appearance: none;
+  border: 1px solid var(--stroke);
+  background: rgba(99, 104, 135, 0.08);
+  color: var(--ink);
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(60,70,100,.10);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.btn:hover{
+  background: rgba(255,255,255,.86);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(60,70,100,.14);
+}
+
+.btn:active{
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(60,70,100,.10);
+}
+
+.btn.ghost{
+  background: transparent;
+  box-shadow: none;
+}
+
+.actions{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-top: 26px;
+}
+
+.hidden{ display:none !important; }
+
+/* -------------------------
+   Module B layout
+------------------------- */
+
+.grid3{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin: 18px 0 26px;
+  align-items: start;  /* ✅ 避免整个网格被拉高 */
+}
+
+@media (min-width: 860px){
+  .grid3{ grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  height: 420px;
+
+  border: 1px solid rgba(99,104,135,.12);
+  background: linear-gradient(180deg, rgba(255,255,255,.40), rgba(255,255,255,.30));  /* ✅ 改了这里 */
+  border-radius: 22px;
+  padding: 22px 18px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 420px;       /* ✅ 固定高度，想要更高可以调成 440 或 460 */
+}
+
+/* Collapsible header (uses <button>) */
+.panelHeader{
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  cursor: pointer;
+  text-align: left;
+
+  flex: 0 0 auto;
+  box-sizing: border-box;
+
+  /* Fix: prevent default button styles */
+  color: var(--ink);
+  font: inherit;
+}
+
+.panelHeader *{ color: inherit; }
+
+.panelText {
+  flex: 1;
+  min-width: 0;
+}
+
+.panelTitle{
+  margin: 0;
+  font-size: 18px;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.panelHint{
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: rgba(99,104,135,.52);
+}
+
+/* Keep hints visible when closed, but calmer + single line */
+.collapsible:not(.open) .panelHint{
+  opacity: .78;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron{
+  margin-top: 2px;
+  font-size: 14px;
+  color: rgba(99,104,135,.55);
+  transition: transform 260ms ease;
+}
+
+/* Text field */
+.field {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;                   /* ✅ 不让用户手动拉伸导致不对齐 */
+  border: 1px solid rgba(99,104,135,.16);
+  background: rgba(255,255,255,.20);
+  color: var(--ink);
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  outline: none;
+}
+
+.field::placeholder{
+  color: rgba(99,104,135,.44);
+}
+
+.field:focus{
+  background: rgba(255,255,255,.24);
+  box-shadow: 0 0 0 2px rgba(99,104,135,.14);
+}
+
+/* Gentle unfold animation */
+
+.collapsible.open .chevron{
+  transform: rotate(180deg);
+}
+
+/* ===== Module B: ONLY open panel expands ===== */
+
+.panelBody {
+  margin-top: 14px;
+}
+
+.collapsible.open .chevron{
+  transform: rotate(180deg);
+}
+
+/* Textarea stable size */
+.field {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  min-height: 240px;
+  resize: vertical;
+  border: 1px solid rgba(99,104,135,.16);
+  background: rgba(255,255,255,.20);
+  color: var(--ink);
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  outline: none;
+}
+
+/* Prevent scrollbar-induced text reflow */
+html{ scrollbar-gutter: stable; }
+body{ overflow-y: scroll; }
+
+
+/* Subtle open/closed background change */
+.collapsible.open{
+  background: rgba(255,255,255,.20);
+}
+.collapsible:not(.open){
+  background: rgba(255,255,255,.12);
+}
+
+/* ===== Module C ===== */
+
+.drivers{
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 24px;
+}
+
+.driver{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.driver input{
+  width: 18px;
+  height: 18px;
+  accent-color: rgba(99,104,135,.6);
+}
+
+.allower{
+  margin: 20px 0 10px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.28);
+  border: 1px solid rgba(99,104,135,.12);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Pause page */
+.pauseText{
+  margin-top: 24px;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+/* ===== Module C ===== */
+
+.drivers{
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 24px;
+}
+
+.driver{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.driver input{
+  width: 18px;
+  height: 18px;
+  accent-color: rgba(99,104,135,.6);
+}
+
+.allower{
+  margin: 20px 0 10px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.28);
+  border: 1px solid rgba(99,104,135,.12);
+  font-size: 16px;
+  line-height: 1.6;
+  height: 190px;          /* 固定高度，你可以调大一点 */
+  overflow-y: auto;       /* 多了就内部滚动 */
+}
+
+.allowerPrefix{
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(99,104,135,.55);
+  margin-bottom: 8px;
+  letter-spacing: .01em;
+}
+
+/* Pause page */
+.pauseText{
+  margin-top: 24px;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.allowerLine{
+  margin: 10px 0;
+}
+
+/* ===== Pause page layout ===== */
+
+.pauseTop{
+  margin-bottom: 22px;
+}
+
+.pauseLine{
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: .02em;
+  color: rgba(99,104,135,.75);
+  line-height: 1.55;
+}
+
+.pauseCenter{
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  text-align: center;
+  margin: 18px 0 22px;
+}
+
+.pauseVisual{
+  width: min(520px, 100%);
+  height: 220px;
+  border-radius: 22px;
+  border: 1px solid rgba(99,104,135,.12);
+  background: rgba(255,255,255,.22);
+  overflow: hidden;
+}
+
+/* text block */
+.pauseText{
+  width: min(720px, 100%);
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+/* if you output multiple lines */
+.pauseText .allowerLine{
+  margin: 10px 0;
+}
+
+/* ===== Visual presets (no photos needed, calm abstract “still life”) ===== */
+
+.visual-curtain{
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 16px, rgba(255,255,255,.08) 16px 34px),
+    radial-gradient(420px 220px at 25% 45%, rgba(255,255,255,.24), transparent 60%);
+}
+
+
+/* Pause text gentle rise */
+.pauseText{
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+
+.pauseText.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Fullscreen Pause Screen ===== */
+.pauseScreen{
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+}
+
+/* Background image (quiet, non-human) */
+.pauseScreen{
+  background-image:
+    radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.16), transparent 60%),
+    radial-gradient(800px 520px at 80% 30%, rgba(255,255,255,.12), transparent 60%),
+    linear-gradient(180deg, rgba(10,12,20,.55), rgba(10,12,20,.70)),
+    url("./images/pause.jpg"); /* ✅ 换成你的图：空椅子/窗帘/纸张等 */
+  background-size: cover;
+  background-position: center;
+}
+
+/* clickable overlay */
+.pauseOverlay{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 28px 18px;
+  cursor: pointer;
+  outline: none;
+}
+
+.pauseBlock{
+  text-align: center;
+  max-width: 920px;
+}
+
+/* Big centered lines */
+.pauseBig{
+  font-family: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(30px, 4vw, 52px);
+  font-weight: 480;
+  letter-spacing: -0.015em;
+  line-height: 1.28;
+  margin: 18px 0;
+
+  color: rgba(245, 245, 245, 0.78);
+  text-shadow: 0 2px 14px rgba(0,0,0,0.18);
+}
+
+/* Allowers text big, centered */
+.pauseAllowersText{
+  font-family: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(40px, 2.6vw, 34px);
+  font-weight: 430;
+  letter-spacing: -0.005em;
+  line-height: 1.45;
+
+  color: rgba(245,245,245,.78);
+  text-shadow: 0 2px 14px rgba(0,0,0,.16);
+}
+
+/* When multiple lines */
+.pauseAllowersText .allowerLine{
+  margin: 14px 0;
+}
+
+/* Gentle rise animation */
+.pauseRise{
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 420ms ease, transform 420ms ease;
+}
+.pauseRise.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pause buttons – slightly larger, calmer weight */
+
+.pauseContinue,
+.pauseBack{
+  font-size: 15px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  line-height: 1;
+}
+
+/* Button Continue */
+.pauseContinue{
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+
+  border: 1px solid rgba(255,255,255,.24);
+  background: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.92);
+  cursor: pointer;
+
+  transition: background .15s ease, transform .12s ease;
+}
+
+.pauseContinue:hover{
+  background: rgba(255,255,255,.26);
+}
+
+.pauseContinue:active{
+  transform: translateY(1px);
+}
+
+/* Button Back */
+.pauseBack{
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.10);
+  color: rgba(255,255,255,.78);
+  cursor: pointer;
+
+  transition: background .15s ease;
+}
+
+.pauseBack:hover{
+  background: rgba(255,255,255,.16);
+}
+
+
+/* ===== Module D: Values ===== */
+
+#module-d.card{
+  height: min(780px, 82vh);
+  overflow: hidden; /* prevent layout jump */
+  display: flex;
+  flex-direction: column;
+}
+
+#module-d .actions{ margin-top: auto; }
+
+.helper{
+  margin: -10px 0 14px;
+  color: rgba(99,104,135,.72);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.valuesGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 6px;
+
+  overflow: auto;        /* scroll inside */
+  padding: 4px 2px 14px; /* breathing room */
+}
+
+@media (min-width: 700px){
+  .valuesGrid{ grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 980px){
+  .valuesGrid{ grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.valuePill{
+  appearance: none;
+  border: 1px solid rgba(99,104,135,.14);
+  background: rgba(255,255,255,.22);
+  color: var(--ink);
+  padding: 14px 16px;
+  border-radius: 18px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
+  box-shadow: 0 6px 18px rgba(60,70,100,.06);
+  text-align: left;
+
+  position: relative;    /* tooltip anchor */
+  overflow: visible;     /* allow tooltip */
+}
+
+.valuePill:hover{
+  background: rgba(255,255,255,.34);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(60,70,100,.10);
+}
+
+.valuePill:active{
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(60,70,100,.06);
+}
+
+.valuePill:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99,104,135,.16), 0 10px 24px rgba(60,70,100,.10);
+}
+
+.valueName{
+  font-size: 16px;
+  font-weight: 560;
+  letter-spacing: -0.01em;
+}
+
+.valueMeta{
+  font-size: 13px;
+  color: rgba(99,104,135,.55);
+  white-space: nowrap;
+}
+
+.valuePill[aria-pressed="true"]{
+  background: rgba(255,255,255,.55);
+  border-color: rgba(99,104,135,.22);
+}
+
+.valuePill[aria-pressed="true"] .valueMeta{
+  color: rgba(99,104,135,.70);
+}
+
+/* Definition overlay INSIDE the pill (won't be clipped by valuesGrid overflow) */
+.valuePill{
+  overflow: hidden; /* keep overlay inside rounded corners */
+}
+
+.valueHint{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  padding: 14px 16px;
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid rgba(99,104,135,.14);
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(6px);
+
+  color: rgba(99,104,135,.82);
+  font-size: 14px;
+  line-height: 1.5;
+
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .16s ease, transform .16s ease;
+
+  pointer-events: none; /* still allows click to select the value */
+}
+
+/* Keep label/meta under the overlay */
+.valueName,
+.valueMeta{
+  position: relative;
+  z-index: 1;
+}
+
+.valuePill:hover .valueHint,
+.valuePill:focus-visible .valueHint{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.limitNote{
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(99,104,135,.14);
+  background: rgba(255,255,255,.26);
+  color: rgba(99,104,135,.72);
+  font-size: 14px;
+}
+
+/* ===== Module E ===== */
+
+.e-block{
+  margin: 12px 0 14px;
+}
+
+.e-label{
+  display: block;
+  font-size: 14px;
+  color: rgba(99,104,135,.72);
+  margin-bottom: 8px;
+}
+
+.e-source{
+  min-height: 90px;
+  background: rgba(255,255,255,.18);
+}
+
+.e-instruction{
+  margin: 6px 0 18px;
+  font-size: 15px;
+  color: rgba(99,104,135,.85);
+}
+
+.e-line{
+  margin: 14px 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.22);
+  border: 1px solid rgba(99,104,135,.12);
+  line-height: 1.55;
+}
+
+.e-prefix{
+  display: block;
+  font-size: 13px;
+  letter-spacing: .01em;
+  color: rgba(99,104,135,.60);
+  margin-bottom: 6px;
+}
+
+.e-text{
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.e-close{
+  margin-top: 24px;
+  text-align: center;
+
+  font-size: 13.5px;
+  line-height: 1.7;
+
+  color: rgba(99,104,135,.48);
+}
+
+#e_next_step{
+  min-height: 64px;
+}
+
+/* ===== Module E reference blocks ===== */
+
+.e-ref{
+  margin: 10px 0 18px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(99,104,135,.18);
+}
+
+.e-ref-block{
+  margin-top: 10px;
+}
+
+.e-ref-label{
+  display: block;
+  font-size: 12.5px;
+  color: rgba(99,104,135,.55);
+  margin-bottom: 4px;
+}
+
+.e-ref-text{
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(99,104,135,.78);
+  white-space: pre-wrap;
+}
