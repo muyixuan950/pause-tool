@@ -1,3 +1,9 @@
+// In-memory state (no persistence)
+const state = {
+  moduleB: null,
+  moduleD: null
+};
+
 const moduleA = document.getElementById("module-a");
 const moduleB = document.getElementById("module-b");
 const moduleC = document.getElementById("module-c");
@@ -22,19 +28,7 @@ function saveB(){
     nocontrol: bNoControl.value.trim(),
     support: bSupport.value.trim(),
   };
-  localStorage.setItem("iam_b", JSON.stringify(data));
-}
-
-function loadB(){
-  if(!bInfluence || !bNoControl || !bSupport) return;
-  const raw = localStorage.getItem("iam_b");
-  if(!raw) return;
-  try{
-    const data = JSON.parse(raw);
-    bInfluence.value = data.influence || "";
-    bNoControl.value = data.nocontrol || "";
-    bSupport.value = data.support || "";
-  }catch(e){}
+  state.moduleB = data;
 }
 
 function goTo(from, to){
@@ -47,8 +41,6 @@ function goTo(from, to){
   if(to) to.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-
-loadB();
 
 // A -> B
 if(startBtn) startBtn.addEventListener("click", () => goTo(moduleA, moduleB));
@@ -245,19 +237,7 @@ const VALUES = [
 let selectedValues = new Set();
 
 function saveD(){
-  localStorage.setItem("iam_d", JSON.stringify(Array.from(selectedValues)));
-}
-
-function loadD(){
-  const raw = localStorage.getItem("iam_d");
-  if(!raw) return;
-  try{
-    const arr = JSON.parse(raw);
-    if(Array.isArray(arr)){
-      const allowed = new Set(VALUES.map(v => v.name));
-      selectedValues = new Set(arr.filter(v => allowed.has(v)));
-    }
-  }catch(e){}
+  state.moduleD = Array.from(selectedValues);
 }
 
 function setContinueState(){
@@ -327,27 +307,12 @@ function renderValues(){
 }
 
 // init
-loadD();
 renderValues();
 
 // ----- Navigation -----
-
-// Pause -> D (click continue button)
-if(pauseToD){
-  pauseToD.addEventListener("click", () => goTo(moduleCPause, moduleD));
-}
-
 // D -> Pause
 if(backToPause){
   backToPause.addEventListener("click", () => goTo(moduleD, moduleCPause));
-}
-
-// D -> E
-if(toE){
-  toE.addEventListener("click", () => {
-    if(toE.disabled) return;
-    goTo(moduleD, moduleE);
-  });
 }
 
 // E -> D
@@ -387,21 +352,14 @@ function normalizeValues(arr){
 // Load data into Module E
 function loadE(){
   // ---- From Module B ----
-  const rawB = localStorage.getItem("iam_b");
-  if(rawB && eInfluenceSource){
-    try{
-      const data = JSON.parse(rawB);
-      eInfluenceSource.value = data.influence || "";
-    }catch(e){}
-  }
+
 
   // ---- From Module B (background refs) ----
-if(rawB){
-  try{
-    const data = JSON.parse(rawB);
-    if(eNoControl) eNoControl.textContent = data.nocontrol || "";
-    if(eSupport) eSupport.textContent = data.support || "";
-  }catch(e){}
+if(state.moduleB){
+  const data = state.moduleB;
+  if(eNoControl) eNoControl.textContent = data.nocontrol || "";
+  if(eSupport) eSupport.textContent = data.support || "";
+  if(eInfluenceSource) eInfluenceSource.textContent = data.influence || "";
 }
 
 // ---- From Module C (allowers) ----
@@ -425,14 +383,8 @@ if(eAllowing){
 }
 
  // ---- From Module D (values) ----
-const rawD = localStorage.getItem("iam_d");
-if(rawD && eValues){
-  try{
-    const arr = JSON.parse(rawD);
-    if(Array.isArray(arr)){
-      eValues.textContent = normalizeValues(arr);
-    }
-  }catch(e){}
+if(state.moduleD && eValues){
+  eValues.textContent = normalizeValues(state.moduleD);
 }
 
   // Focus next step box
